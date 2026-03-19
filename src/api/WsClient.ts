@@ -31,6 +31,22 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
     });
   }
 
+  public connect(account: Account, address: string): void {
+    this.socket.send(
+      JSON.stringify({
+        type: "connect",
+        account: account.uuid,
+        server: address,
+      }),
+    );
+  }
+
+  public disconnect(account: Account): void {
+    this.socket.send(
+      JSON.stringify({ type: "disconnect", account: account.uuid }),
+    );
+  }
+
   private handleMessage(message: Record<string, unknown>): void {
     switch (message.type) {
       case "accountList": {

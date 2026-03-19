@@ -58,7 +58,7 @@ export class Modal extends Component {
         id="${this.modalId}"
         closedby="any"
         aria-labelledby="${this.modalId}-title"
-        class="group/modal h-screen min-h-full w-screen items-end justify-center bg-transparent p-4 text-center backdrop:bg-zinc-900/50 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300 backdrop:ease-out open:flex open:backdrop:opacity-100 focus:outline-none sm:items-center sm:p-0 starting:open:backdrop:opacity-0"
+        class="group/modal h-screen w-screen items-end justify-center bg-transparent p-4 text-center backdrop:bg-zinc-900/50 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300 backdrop:ease-out open:flex open:backdrop:opacity-100 focus:outline-none sm:items-center sm:p-0 starting:open:backdrop:opacity-0"
       >
         <button
           class="absolute inset-0"
