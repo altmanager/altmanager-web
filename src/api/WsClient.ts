@@ -7,7 +7,7 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
   private readonly socket: WebSocket;
   private readonly accounts: Map<string, Account> = new Map();
 
-  public constructor(url: string) {
+  private constructor(url: URL | string) {
     super();
     this.socket = new WebSocket(url);
 
@@ -21,20 +21,55 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
     });
   }
 
+  public static connect(url: URL | string): Promise<WsClient> {
+    const client = new WsClient(url);
+    return new Promise((resolve) => {
+      client.socket.addEventListener("open", () => resolve(client));
+    });
+  }
+
+  public listAccounts(): Promise<Account[]> {
+    return new Promise((resolve) => {
+      this.socket.send(JSON.stringify({ type: "accounts:list" }));
+
+      this.addEventListener("accountList", (e) => {
+        resolve(e.detail);
+      }, { once: true });
+    });
+  }
+
+  public getAccount(uuid: string): Promise<Account | null> {
+    return new Promise((resolve) => {
+      this.socket.send(JSON.stringify({ type: "accounts:get", account: uuid }));
+
+      const subscribe = () => {
+        this.addEventListener("account", (e) => {
+          if (e.detail.requested !== uuid) {
+            subscribe();
+            return;
+          }
+          resolve(e.detail.account);
+        }, { once: true });
+      };
+
+      subscribe();
+    });
+  }
+
   public addAccount(): Promise<{ verificationUri: string; userCode: string }> {
     return new Promise((resolve) => {
+      this.socket.send(JSON.stringify({ type: "accounts:add" }));
+
       this.addEventListener("beginAuth", (e) => {
         resolve(e.detail);
       }, { once: true });
-
-      this.socket.send(JSON.stringify({ type: "addAccount" }));
     });
   }
 
   public connect(account: Account, address: string): void {
     this.socket.send(
       JSON.stringify({
-        type: "connect",
+        type: "player:connect",
         account: account.uuid,
         server: address,
       }),
@@ -43,13 +78,13 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
 
   public disconnect(account: Account): void {
     this.socket.send(
-      JSON.stringify({ type: "disconnect", account: account.uuid }),
+      JSON.stringify({ type: "player:disconnect", account: account.uuid }),
     );
   }
 
   private handleMessage(message: Record<string, unknown>): void {
     switch (message.type) {
-      case "accountList": {
+      case "accounts:list": {
         const raw = message.accounts as Array<
           {
             uuid: string;
@@ -69,7 +104,37 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
         this.dispatchEvent("accountList", Array.from(this.accounts.values()));
         break;
       }
-      case "beginAuth": {
+      case "accounts:one": {
+        const raw = message as {
+          account: {
+            uuid: string;
+            username: string;
+            skinUrl: string;
+            status: AccountStatus;
+            lastServer: string | null;
+          } | null;
+          request: string;
+        };
+        if (raw.account === null) {
+          this.accounts.delete(raw.request);
+          this.dispatchEvent("account", {
+            account: null,
+            requested: raw.request,
+          });
+          break;
+        }
+        const account = new Account(
+          raw.account.uuid,
+          raw.account.username,
+          raw.account.skinUrl,
+          raw.account.status,
+          raw.account.lastServer,
+        );
+        this.accounts.set(account.uuid, account);
+        this.dispatchEvent("account", { account, requested: raw.request });
+        break;
+      }
+      case "accounts:auth": {
         const { verificationUri, userCode } = message as {
           verificationUri: string;
           userCode: string;

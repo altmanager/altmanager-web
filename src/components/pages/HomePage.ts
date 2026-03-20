@@ -39,12 +39,10 @@ export class HomePage extends Page {
     this.api = api;
   }
 
-  public override connectedCallback() {
+  public override async connectedCallback() {
     super.connectedCallback();
 
-    this.api.addEventListener("accountList", (e) => {
-      this.accounts = e.detail;
-    });
+    this.accounts = await this.api.listAccounts();
 
     this.addAccountModal.addEventListener("toggle", async (e) => {
       if (e.newState !== "open") {
