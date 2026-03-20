@@ -5,6 +5,7 @@ import { Page } from "./pages/Page";
 import { WsClient } from "../api/WsClient";
 import Navigo from "navigo";
 import { HomePage } from "./pages/HomePage";
+import { AccountPage } from "./pages/AccountPage";
 
 @customElement("app-root")
 export class AppRoot extends Component {
@@ -17,7 +18,6 @@ export class AppRoot extends Component {
   public constructor(api: WsClient) {
     super();
     this.api = api;
-    window.app = this;
   }
 
   public override async connectedCallback() {
@@ -42,6 +42,7 @@ export class AppRoot extends Component {
 
     const pages = [
       new HomePage(this.api),
+      new AccountPage(this.api),
     ];
 
     for (const page of pages) {

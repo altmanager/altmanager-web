@@ -92,7 +92,7 @@ export class McText extends Component {
     return html`
       <span
         style="${styleMap(styles)}"
-        class="${classes.join(" ") || nothing}"
+        class="${classes.join(" ") ?? nothing}"
         aria-describedby="${hasHover ? tooltipId : nothing}"
         @click="${component.click_event
           ? () => McText.handleClick(this, component.click_event!)
