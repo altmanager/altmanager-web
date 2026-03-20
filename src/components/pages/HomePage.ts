@@ -8,7 +8,7 @@ import { WsClient } from "../../api/WsClient";
 import { Modal } from "../Modal";
 import { AccountStatus } from "../../models/AccountStatus";
 
-@customElement("home-pages")
+@customElement("home-page")
 export class HomePage extends Page {
   private static readonly STATUSES: Record<
     AccountStatus,
