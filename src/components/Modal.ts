@@ -58,7 +58,7 @@ export class Modal extends Component {
         id="${this.modalId}"
         closedby="any"
         aria-labelledby="${this.modalId}-title"
-        class="group/modal h-screen w-screen items-end justify-center bg-transparent p-4 text-center backdrop:bg-zinc-900/50 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300 backdrop:ease-out open:flex open:backdrop:opacity-100 focus:outline-none sm:items-center sm:p-0 starting:open:backdrop:opacity-0"
+        class="group/modal h-screen max-h-screen w-screen max-w-screen items-end justify-center bg-transparent p-4 text-center backdrop:bg-zinc-900/50 backdrop:opacity-0 backdrop:transition-opacity backdrop:duration-300 backdrop:ease-out open:flex open:backdrop:opacity-100 focus:outline-none sm:items-center sm:p-0 starting:open:backdrop:opacity-0"
       >
         <button
           class="absolute inset-0"
@@ -70,7 +70,7 @@ export class Modal extends Component {
         </button>
 
         <div
-          class="relative translate-y-4 transform overflow-hidden rounded-xl bg-zinc-800 text-left opacity-0 shadow-xl outline -outline-offset-1 outline-white/10 transition-all duration-300 ease-out group-open/modal:translate-y-0 group-open/modal:opacity-100 sm:my-8 sm:w-full sm:max-w-lg sm:translate-y-0 sm:scale-95 group-open/modal:sm:scale-100 starting:group-open/modal:translate-y-4 starting:group-open/modal:opacity-0 starting:group-open/modal:sm:translate-y-0 starting:group-open/modal:sm:scale-95"
+          class="relative w-full translate-y-4 transform overflow-hidden rounded-xl bg-zinc-800 text-left opacity-0 shadow-xl outline -outline-offset-1 outline-white/10 transition-all duration-300 ease-out group-open/modal:translate-y-0 group-open/modal:opacity-100 sm:my-8 sm:w-full sm:max-w-lg sm:translate-y-0 sm:scale-95 group-open/modal:sm:scale-100 starting:group-open/modal:translate-y-4 starting:group-open/modal:opacity-0 starting:group-open/modal:sm:translate-y-0 starting:group-open/modal:sm:scale-95"
         >
           <div
             class="flex flex-col gap-3 px-4 pt-5 pb-4 sm:flex-row sm:items-start sm:gap-4 sm:p-6 sm:pb-6"
