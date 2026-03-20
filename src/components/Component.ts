@@ -1,7 +1,7 @@
 import { LitElement } from "lit";
 
 export abstract class Component extends LitElement {
-  protected createRenderRoot() {
+  protected override createRenderRoot() {
     return this;
   }
 }
