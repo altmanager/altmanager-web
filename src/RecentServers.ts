@@ -29,7 +29,7 @@ export class RecentServers {
 
   public static load() {
     return new RecentServers(
-      JSON.parse(localStorage.getItem("recentServers") ?? "[]"),
+      (JSON.parse(localStorage.getItem("recentServers") ?? "[]") as [string, string][]).map(([address, last]) => [address, new Date(last)]),
     );
   }
 }
