@@ -7,7 +7,7 @@ export class RecentServers {
 
   private top(n: number) {
     return Array.from(this.#list.entries()).sort(([_, a], [_1, b]) =>
-      a.getTime() - b.getTime()
+      b.getTime() - a.getTime()
     ).slice(0, n).map(([address, last]) => ({ address, last }));
   }
 
