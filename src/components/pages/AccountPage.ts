@@ -63,6 +63,8 @@ export class AccountPage extends Page {
                         }
                         input.value.value = s;
                         input.value.focus();
+                        input.value.form?.requestSubmit();
+                        this.connectModal.requestClose();
                       }}"
                       class="text-sm/5 font-medium text-white focus-visible:outline-none"
                     >
