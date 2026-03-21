@@ -296,6 +296,12 @@ export class AccountPage extends Page {
                 `
                 : html`
                   <button
+                    @click="${() => {
+                      if (this.account === null || this.account === undefined) {
+                        return;
+                      }
+                      this.api.disconnect(this.account);
+                    }}"
                     type="button"
                     class="inline-flex w-full justify-center rounded-lg bg-red-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-red-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
                   >
