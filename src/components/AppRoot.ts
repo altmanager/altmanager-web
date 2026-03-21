@@ -57,9 +57,7 @@ export class AppRoot extends Component {
 
   public override render() {
     return html`
-      <div class="mx-auto max-w-2xl px-2 py-8">
-        ${this.page}
-      </div>
+      ${this.page}
     `;
   }
 }
