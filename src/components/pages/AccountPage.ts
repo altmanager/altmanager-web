@@ -15,6 +15,8 @@ export class AccountPage extends Page {
   @state()
   private account?: Account | null;
 
+  private uuid?: string;
+
   private readonly api: WsClient;
   private readonly recentServers = RecentServers.load();
   private readonly connectModal = new Modal("Connect to a server");
@@ -33,12 +35,19 @@ export class AccountPage extends Page {
       return;
     }
 
-    this.api.getAccount(match.data.uuid).then((a) => {
-      this.account = a;
-    });
+    this.uuid = match.data.uuid;
+    this.api.getAccount(match.data.uuid).then();
   }
 
   public override firstUpdated() {
+    this.api.addEventListener("account", e => {
+      if (e.detail.requested !== this.uuid) {
+        return;
+      }
+
+      this.account = e.detail.account;
+    });
+
     this.connectModal.addEventListener("toggle", (e) => {
       if (e.newState !== "open") {
         return;
