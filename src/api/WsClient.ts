@@ -83,6 +83,12 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
     );
   }
 
+  public sendChat(account: Account, message: string): void {
+    this.socket.send(
+      JSON.stringify({ type: "player:chat", account: account.uuid, message }),
+    );
+  }
+
   private handleMessage(message: Record<string, unknown>): void {
     switch (message.type) {
       case "accounts:list": {
@@ -141,6 +147,14 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
           userCode: string;
         };
         this.dispatchEvent("beginAuth", { verificationUri, userCode });
+        break;
+      }
+      case "player:chat": {
+        const { account, message: chat } = message as {
+          account: string;
+          message: unknown;
+        };
+        this.dispatchEvent("chat", { account, message: chat });
         break;
       }
     }

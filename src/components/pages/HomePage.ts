@@ -45,7 +45,6 @@ export class HomePage extends Page {
     this.api.addEventListener("accountList", (e) => {
       this.accounts = e.detail;
     });
-    this.api.listAccounts().then();
 
     this.addAccountModal.addEventListener("toggle", async (e) => {
       if (e.newState !== "open") {
@@ -159,6 +158,7 @@ export class HomePage extends Page {
 
   public override onOpen(match?: Match) {
     super.onOpen(match);
+    this.api.listAccounts().then();
     document.title = "AltManager";
   }
 
