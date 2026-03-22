@@ -43,7 +43,7 @@ export class AccountPage extends Page {
       if (this.account === null || this.account === undefined) {
         return;
       }
-      this.api.sendChat(this.account, input)
+      this.api.sendChat(this.account, input);
     });
   }
 
@@ -190,7 +190,7 @@ export class AccountPage extends Page {
                   `
                   : nothing}
                 <div class="mt-1 flex ${this.account.status ===
-                AccountStatus.ONLINE
+                    AccountStatus.ONLINE
                   ? "flex"
                   : "hidden"}" aria-label="health: 15">
                   <svg

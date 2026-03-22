@@ -1,8 +1,6 @@
 import { customElement } from "lit/decorators.js";
 import { Component } from "./Component";
-import { Account } from "../models/Account";
-import { WsClient } from "../api/WsClient";
-import { html, render } from "lit";
+import { html } from "lit";
 import { createRef, ref } from "lit/directives/ref.js";
 import { McText } from "./McText";
 
