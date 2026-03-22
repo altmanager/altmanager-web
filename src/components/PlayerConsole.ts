@@ -11,16 +11,34 @@ export class PlayerConsole extends Component {
   private readonly out = createRef<HTMLDivElement>();
   private readonly in = createRef<HTMLInputElement>();
   private readonly inputConsumer: (input: string) => unknown;
+  private lifeCycle: AbortController | null = null;
 
   public constructor(inputConsumer: (input: string) => unknown = () => {}) {
     super();
     this.inputConsumer = inputConsumer;
   }
 
-  public override firstUpdated() {
-    if (this.out.value === undefined || this.in.value === undefined) {
-      throw new Error("Interface not available.");
-    }
+  public override connectedCallback() {
+    super.connectedCallback();
+    this.lifeCycle = new AbortController();
+
+    document.addEventListener("keydown", (e) => {
+      if (
+        e.ctrlKey || e.metaKey || e.altKey ||
+        ["INPUT", "TEXTAREA", "SELECT", "BUTTON", "A"].includes(
+          document.activeElement?.tagName?.toUpperCase()!,
+        ) || (document.activeElement as HTMLElement)?.isContentEditable ||
+        e.key.length !== 1
+      ) {
+        return;
+      }
+      this.in.value?.focus();
+    }, { signal: this.lifeCycle.signal });
+  }
+
+  public override disconnectedCallback() {
+    super.disconnectedCallback();
+    this.lifeCycle?.abort();
   }
 
   public write(message: unknown, channel?: string) {
