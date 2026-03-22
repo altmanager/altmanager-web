@@ -1,7 +1,7 @@
-import { customElement } from "lit/decorators.js";
-import { Component } from "./Component";
-import { html } from "lit";
+import { html, nothing } from "lit";
+import { customElement, property } from "lit/decorators.js";
 import { createRef, ref } from "lit/directives/ref.js";
+import { Component } from "./Component";
 import { McText } from "./McText";
 
 @customElement("player-console")
@@ -10,6 +10,9 @@ export class PlayerConsole extends Component {
   private readonly in = createRef<HTMLInputElement>();
   private readonly inputConsumer: (input: string) => unknown;
   private lifeCycle: AbortController | null = null;
+
+  @property({ type: Boolean })
+  public disabled = false;
 
   public constructor(inputConsumer: (input: string) => unknown = () => {}) {
     super();
@@ -71,9 +74,12 @@ export class PlayerConsole extends Component {
       }}">
         <input
           ${ref(this.in)}
+          ?disabled="${this.disabled}"
           id="chat"
           class="w-full rounded-b-xl border border-white/10 bg-zinc-950 px-2 py-1 font-mono tracking-tight text-white ring-16 ring-transparent outline-2 outline-offset-2 outline-transparent transition-all ring-inset placeholder:text-zinc-500 focus:ring-white/3 focus:outline-offset-0 focus:outline-blue-400/70"
-          placeholder="Type to chat or run commands"
+          placeholder="${this.disabled
+            ? nothing
+            : "Type to chat or run commands"}"
         />
         <input type="submit" class="sr-only">
       </form>

@@ -45,6 +45,7 @@ export class AccountPage extends Page {
       }
       this.api.sendChat(this.account, input);
     });
+    this.console.disabled = true;
   }
 
   public override firstUpdated() {
@@ -54,6 +55,9 @@ export class AccountPage extends Page {
       }
 
       this.account = e.detail.account;
+      if (this.account !== null && this.console !== null) {
+        this.console.disabled = this.account.status !== AccountStatus.ONLINE;
+      }
     });
 
     this.api.addEventListener("chat", (e) => {
