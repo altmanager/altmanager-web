@@ -24,6 +24,10 @@ export class PlayerConsole extends Component {
   }
 
   public write(message: unknown, channel?: string) {
+    if (this.out.value === undefined) {
+      return;
+    }
+    const out = this.out.value;
     const mcText = new McText();
     mcText.json = JSON.stringify(message);
     const line = document.createElement("p");
@@ -31,14 +35,14 @@ export class PlayerConsole extends Component {
       line.textContent = `[${channel}] `;
     }
     line.append(mcText);
-    this.out.value?.append(line);
+    out.prepend(line);
   }
 
   public override render() {
     return html`
       <div
         ${ref(this.out)}
-        class="h-96 overflow-auto rounded-t-xl border border-b-0 border-white/10 bg-zinc-950 p-2 font-mono text-sm text-zinc-200"
+        class="h-96 overflow-auto rounded-t-xl border border-b-0 border-white/10 bg-zinc-950 p-2 font-mono text-sm text-zinc-200 flex flex-col-reverse"
       >
       </div>
       <form @submit="${(e: SubmitEvent) => {
