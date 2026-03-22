@@ -143,6 +143,14 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
         this.dispatchEvent("beginAuth", { verificationUri, userCode });
         break;
       }
+      case "player:chat": {
+        const { account, message: chat } = message as {
+          account: string;
+          message: unknown;
+        };
+        this.dispatchEvent("chat", { account, message: chat });
+        break;
+      }
     }
   }
 }

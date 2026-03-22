@@ -5,4 +5,5 @@ export interface WsClientEvents {
   account: { account: Account | null; requested: string };
   beginAuth: { verificationUri: string; userCode: string };
   offline: void;
+  chat: { account: string; message: unknown}
 }
