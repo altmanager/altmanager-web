@@ -111,7 +111,7 @@ export class HomePage extends Page {
           <button
             ${ref(primary)}
             type="button"
-            class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:hover:bg-blue-500 disabled:brightness-50 disabled:cursor-not-allowed"
+            class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:hover:bg-blue-500 disabled:brightness-50 disabled:cursor-not-allowed"
             disabled
           >
             ${navigator.clipboard ? "Copy and open" : "Open"}
@@ -122,7 +122,7 @@ export class HomePage extends Page {
             type="button"
             command="close"
             commandfor="${this.addAccountModal.modalId}"
-            class="inline-flex w-full justify-center rounded-lg bg-white/10 px-3 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 outline-2 outline-offset-1 outline-transparent transition-all duration-150 hover:bg-white/20 focus-visible:-outline-offset-2 focus-visible:outline-blue-400/70"
+            class="inline-flex w-full justify-center rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold text-white inset-ring inset-ring-white/5 outline-2 outline-offset-1 outline-transparent transition-all duration-150 hover:bg-white/20 focus-visible:-outline-offset-2 focus-visible:outline-blue-400/70"
           >
             Cancel
           </button>
