@@ -23,8 +23,9 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
 
   public static connect(url: URL | string): Promise<WsClient> {
     const client = new WsClient(url);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       client.socket.addEventListener("open", () => resolve(client));
+      client.socket.addEventListener("error", (e) => reject(e), { once: true });
     });
   }
 

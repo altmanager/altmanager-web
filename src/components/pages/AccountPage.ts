@@ -40,7 +40,7 @@ export class AccountPage extends Page {
   }
 
   public override firstUpdated() {
-    this.api.addEventListener("account", e => {
+    this.api.addEventListener("account", (e) => {
       if (e.detail.requested !== this.uuid) {
         return;
       }
@@ -117,7 +117,7 @@ export class AccountPage extends Page {
               <input
                 type="submit"
                 value="Connect"
-                class="inline-flex justify-center rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                class="inline-flex justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
               />
             </div>
           </form>
@@ -296,7 +296,7 @@ export class AccountPage extends Page {
                 ? html`
                   <button
                     type="button"
-                    class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                    class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
                     command="show-modal"
                     commandfor="${this.connectModal.modalId}"
                   >
@@ -312,7 +312,7 @@ export class AccountPage extends Page {
                       this.api.disconnect(this.account);
                     }}"
                     type="button"
-                    class="inline-flex w-full justify-center rounded-lg bg-red-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-red-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                    class="inline-flex w-full justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-red-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
                   >
                     Disconnect
                   </button>
