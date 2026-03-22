@@ -10,6 +10,12 @@ import { McText } from "./McText";
 export class PlayerConsole extends Component {
   private readonly out = createRef<HTMLDivElement>();
   private readonly in = createRef<HTMLInputElement>();
+  private readonly inputConsumer: (input: string) => unknown;
+
+  public constructor(inputConsumer: (input: string) => unknown = () => {}) {
+    super();
+    this.inputConsumer = inputConsumer;
+  }
 
   public override firstUpdated() {
     if (this.out.value === undefined || this.in.value === undefined) {
@@ -35,7 +41,14 @@ export class PlayerConsole extends Component {
         class="h-96 overflow-auto rounded-t-xl border border-b-0 border-white/10 bg-zinc-950 p-2 font-mono text-sm text-zinc-200"
       >
       </div>
-      <form @submit="${(e: SubmitEvent) => e.preventDefault()}">
+      <form @submit="${(e: SubmitEvent) => {
+        e.preventDefault();
+        if (this.in.value === undefined) {
+          return;
+        }
+        this.inputConsumer(this.in.value.value.trim());
+        this.in.value.value = "";
+      }}">
         <input
           ${ref(this.in)}
           id="chat"

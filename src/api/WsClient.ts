@@ -83,6 +83,12 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
     );
   }
 
+  public sendChat(account: Account, message: string): void {
+    this.socket.send(
+      JSON.stringify({ type: "player:chat", account: account.uuid, message }),
+    );
+  }
+
   private handleMessage(message: Record<string, unknown>): void {
     switch (message.type) {
       case "accounts:list": {

@@ -39,7 +39,12 @@ export class AccountPage extends Page {
 
     this.uuid = match.data.uuid;
     this.api.getAccount(match.data.uuid).then();
-    this.console = new PlayerConsole();
+    this.console = new PlayerConsole((input) => {
+      if (this.account === null || this.account === undefined) {
+        return;
+      }
+      this.api.sendChat(this.account, input)
+    });
   }
 
   public override firstUpdated() {
