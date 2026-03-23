@@ -418,6 +418,7 @@ export class Item {
 
     const components: TranslatableTextComponent = {
       translate: "item.components",
+      color: "dark_gray",
       with: [
         {
           text: Object.keys(this.components).length.toString(),
