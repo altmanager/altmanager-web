@@ -2,6 +2,7 @@ import "./style.css";
 import { AppRoot } from "./components/AppRoot";
 import { WsClient } from "./api/WsClient";
 import { html, render } from "lit";
+import { McText } from "./components/McText";
 
 interface Env {
   ALTMANAGER_SERVER: string;
@@ -86,6 +87,10 @@ try {
 }
 api.addEventListener("offline", () => connectionError());
 const root = new AppRoot(api);
+
+McText.lang = await fetch(
+  "https://assets.mcasset.cloud/1.21.11/assets/minecraft/lang/en_us.json",
+).then((r) => r.json());
 
 document.body.replaceChildren();
 document.body.append(root);
