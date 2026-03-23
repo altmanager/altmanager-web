@@ -23,8 +23,9 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
 
   public static connect(url: URL | string): Promise<WsClient> {
     const client = new WsClient(url);
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       client.socket.addEventListener("open", () => resolve(client));
+      client.socket.addEventListener("error", (e) => reject(e), { once: true });
     });
   }
 
@@ -79,6 +80,12 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
   public disconnect(account: Account): void {
     this.socket.send(
       JSON.stringify({ type: "player:disconnect", account: account.uuid }),
+    );
+  }
+
+  public sendChat(account: Account, message: string): void {
+    this.socket.send(
+      JSON.stringify({ type: "player:chat", account: account.uuid, message }),
     );
   }
 
@@ -140,6 +147,14 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
           userCode: string;
         };
         this.dispatchEvent("beginAuth", { verificationUri, userCode });
+        break;
+      }
+      case "player:chat": {
+        const { account, message: chat } = message as {
+          account: string;
+          message: unknown;
+        };
+        this.dispatchEvent("chat", { account, message: chat });
         break;
       }
     }

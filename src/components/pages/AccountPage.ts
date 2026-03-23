@@ -9,6 +9,7 @@ import { Modal } from "../Modal";
 import { RecentServers } from "../../RecentServers";
 import { createRef, ref } from "lit/directives/ref.js";
 import { ClickEvent } from "../../text/ClickEvent";
+import { PlayerConsole } from "../PlayerConsole";
 
 @customElement("account-page")
 export class AccountPage extends Page {
@@ -20,6 +21,7 @@ export class AccountPage extends Page {
   private readonly api: WsClient;
   private readonly recentServers = RecentServers.load();
   private readonly connectModal = new Modal("Connect to a server");
+  private console: PlayerConsole | null = null;
 
   public constructor(api: WsClient) {
     super("/p/:uuid");
@@ -37,15 +39,32 @@ export class AccountPage extends Page {
 
     this.uuid = match.data.uuid;
     this.api.getAccount(match.data.uuid).then();
+    this.console = new PlayerConsole((input) => {
+      if (this.account === null || this.account === undefined) {
+        return;
+      }
+      this.api.sendChat(this.account, input);
+    });
+    this.console.disabled = true;
   }
 
   public override firstUpdated() {
-    this.api.addEventListener("account", e => {
+    this.api.addEventListener("account", (e) => {
       if (e.detail.requested !== this.uuid) {
         return;
       }
 
       this.account = e.detail.account;
+      if (this.account !== null && this.console !== null) {
+        this.console.disabled = this.account.status !== AccountStatus.ONLINE;
+      }
+    });
+
+    this.api.addEventListener("chat", (e) => {
+      if (e.detail.account !== this.uuid) {
+        return;
+      }
+      this.console?.write(e.detail.message);
     });
 
     this.connectModal.addEventListener("toggle", (e) => {
@@ -117,7 +136,7 @@ export class AccountPage extends Page {
               <input
                 type="submit"
                 value="Connect"
-                class="inline-flex justify-center rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                class="inline-flex justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
               />
             </div>
           </form>
@@ -296,7 +315,7 @@ export class AccountPage extends Page {
                 ? html`
                   <button
                     type="button"
-                    class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                    class="inline-flex w-full justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-blue-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
                     command="show-modal"
                     commandfor="${this.connectModal.modalId}"
                   >
@@ -312,7 +331,7 @@ export class AccountPage extends Page {
                       this.api.disconnect(this.account);
                     }}"
                     type="button"
-                    class="inline-flex w-full justify-center rounded-lg bg-red-500 px-3 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-red-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
+                    class="inline-flex w-full justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-semibold text-white outline-2 outline-offset-4 outline-transparent transition-all duration-150 hover:bg-red-400 focus-visible:outline-offset-2 focus-visible:outline-blue-400/70 disabled:cursor-not-allowed disabled:brightness-50 disabled:hover:bg-blue-500"
                   >
                     Disconnect
                   </button>
@@ -355,20 +374,7 @@ export class AccountPage extends Page {
           </div>
           <div>
             <h2 class="mb-2 font-semibold text-white">Console</h2>
-            <div>
-              <div
-                class="h-96 overflow-auto rounded-t-xl border border-b-0 border-white/10 bg-zinc-950 p-2 font-mono text-sm text-zinc-200"
-              >
-              </div>
-              <form>
-                <input
-                  id="chat"
-                  class="w-full rounded-b-xl border border-white/10 bg-zinc-950 px-2 py-1 font-mono tracking-tight text-white ring-16 ring-transparent outline-2 outline-offset-2 outline-transparent transition-all ring-inset placeholder:text-zinc-500 focus:ring-white/3 focus:outline-offset-0 focus:outline-blue-400/70"
-                  placeholder="Type to chat or run commands"
-                />
-                <input type="submit" class="sr-only">
-              </form>
-            </div>
+            ${this.console}
           </div>
         </div>
       `} ${this.connectModal}

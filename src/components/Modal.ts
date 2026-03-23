@@ -4,6 +4,8 @@ import { Component } from "./Component";
 
 @customElement("x-modal")
 export class Modal extends Component {
+  private static idCounter = 0;
+
   @property({ type: Object })
   public icon?: TemplateResult;
 
@@ -19,7 +21,7 @@ export class Modal extends Component {
   @query("dialog")
   public dialog!: HTMLDialogElement;
 
-  public readonly modalId = `modal-${crypto.randomUUID()}`;
+  public readonly modalId = `modal-${++Modal.idCounter}`;
 
   public constructor(
     title: string,

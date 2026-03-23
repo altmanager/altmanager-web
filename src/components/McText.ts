@@ -33,6 +33,7 @@ export class McText extends Component {
     yellow: "text-yellow-300",
     white: "text-white",
   };
+  private static idCounter = 0;
 
   @property({ type: String })
   public json: string = "";
@@ -87,7 +88,7 @@ export class McText extends Component {
     const component = McText.parse(parsed);
     const { styles = {}, classes = [] } = this.styleComponent(component);
     const hasHover = !!component.hover_event;
-    const tooltipId = hasHover ? crypto.randomUUID() : nothing;
+    const tooltipId = hasHover ? `mc-hover-${++McText.idCounter}` : nothing;
 
     return html`
       <span
