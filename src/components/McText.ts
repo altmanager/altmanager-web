@@ -91,6 +91,9 @@ export class McText extends Component {
     const hasHover = component.hover_event !== undefined;
     const tooltipId = hasHover ? `mc-hover-${++McText.idCounter}` : nothing;
     const clickEvent = component.click_event;
+    if (clickEvent) {
+      classes.push("cursor-pointer");
+    }
 
     const inner = html`
       ${this.resolveContent(component)}${component.extra?.map((child) =>
