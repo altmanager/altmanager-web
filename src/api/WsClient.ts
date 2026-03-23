@@ -84,6 +84,9 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
   }
 
   public sendChat(account: Account, message: string): void {
+    if (account.status !== AccountStatus.ONLINE) {
+      return;
+    }
     this.socket.send(
       JSON.stringify({ type: "player:chat", account: account.uuid, message }),
     );
