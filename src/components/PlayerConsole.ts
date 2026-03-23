@@ -49,23 +49,26 @@ export class PlayerConsole extends Component {
       return;
     }
 
-    this.out.value.addEventListener("mc-click" as any, (e: CustomEvent<ClickEvent>) => {
-      if (this.in.value === undefined) {
-        return;
-      }
-      const click = e.detail;
-      switch (click.action) {
-        case ClickAction.SUGGEST_COMMAND: {
-          this.in.value.value = click.command;
-          this.in.value.focus();
-          break;
+    this.out.value.addEventListener(
+      "mc-click" as any,
+      (e: CustomEvent<ClickEvent>) => {
+        if (this.in.value === undefined) {
+          return;
         }
-        case ClickAction.RUN_COMMAND: {
-          this.inputConsumer(click.command);
-          break;
+        const click = e.detail;
+        switch (click.action) {
+          case ClickAction.SUGGEST_COMMAND: {
+            this.in.value.value = click.command;
+            this.in.value.focus();
+            break;
+          }
+          case ClickAction.RUN_COMMAND: {
+            this.inputConsumer(click.command);
+            break;
+          }
         }
-      }
-    });
+      },
+    );
   }
 
   public write(message: unknown, channel?: string) {
