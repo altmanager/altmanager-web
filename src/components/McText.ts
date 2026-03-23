@@ -10,6 +10,7 @@ import { SelectorTextComponent } from "../text/SelectorTextComponent";
 import { KeybindTextComponent } from "../text/KeybindTextComponent";
 import { NbtTextComponent } from "../text/NbtTextComponent";
 import { HoverAction } from "../text/HoverAction";
+import { ClickAction } from "../text/ClickAction";
 import { ClickEvent } from "../text/ClickEvent";
 
 @customElement("mc-text")
@@ -89,30 +90,44 @@ export class McText extends Component {
     const { styles = {}, classes = [] } = this.styleComponent(component);
     const hasHover = component.hover_event !== undefined;
     const tooltipId = hasHover ? `mc-hover-${++McText.idCounter}` : nothing;
+    const clickEvent = component.click_event;
+
+    const inner = html`
+      ${this.resolveContent(component)}${component.extra?.map((child) =>
+        html`
+          <mc-text json="${JSON.stringify(child)}"></mc-text>
+        `
+      )}${hasHover
+        ? html`
+          <div id="${tooltipId as string}" role="tooltip" class="hidden fixed">
+            ${this.renderHover(component)}
+          </div>
+        `
+        : nothing}
+    `;
+
+    if (clickEvent?.action === ClickAction.OPEN_URL) {
+      return html`
+        <a
+          href="${clickEvent.url}"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="${styleMap(styles)}"
+          class="${classes.join(" ") ?? nothing}"
+          aria-describedby="${hasHover ? tooltipId : nothing}"
+        >${inner}</a>
+      `;
+    }
 
     return html`
       <span
         style="${styleMap(styles)}"
         class="${classes.join(" ") ?? nothing}"
         aria-describedby="${hasHover ? tooltipId : nothing}"
-        @click="${component.click_event
-          ? () => McText.handleClick(this, component.click_event!)
+        @click="${clickEvent
+          ? () => McText.handleClick(this, clickEvent)
           : nothing}"
-      >${this.resolveContent(component)}${component.extra?.map((child) =>
-        html`
-          <mc-text json="${JSON.stringify(child)}"></mc-text>
-        `
-      )}${hasHover
-        ? html`
-          <div
-            id="${tooltipId as string}"
-            role="tooltip"
-            style="display:none;position:fixed;"
-          >
-            ${this.renderHover(component)}
-          </div>
-        `
-        : nothing}</span>
+      >${inner}</span>
     `;
   }
 
@@ -238,6 +253,10 @@ export class McText extends Component {
   }
 
   private static handleClick(el: McText, clickEvent: ClickEvent): void {
+    if (clickEvent.action === ClickAction.COPY_TO_CLIPBOARD) {
+      navigator.clipboard.writeText(clickEvent.value);
+      return;
+    }
     el.dispatchEvent(
       new CustomEvent("mc-click", {
         bubbles: true,
