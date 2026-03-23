@@ -198,7 +198,17 @@ export class McText extends Component {
     if (hoverEvent.action === HoverAction.SHOW_ENTITY) {
       return hoverEvent.name
         ? html`
-          <mc-text json="${JSON.stringify(hoverEvent.name)}"></mc-text>
+          <mc-text json="${JSON.stringify({
+            text: "",
+            extra: [
+              hoverEvent.name,
+              "\n",
+              {
+                text: hoverEvent.uuid,
+                color: "dark_gray",
+              },
+            ],
+          })}"></mc-text>
         `
         : html`
           ${hoverEvent.id}
