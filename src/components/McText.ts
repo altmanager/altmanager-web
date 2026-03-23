@@ -12,6 +12,7 @@ import { NbtTextComponent } from "../text/NbtTextComponent";
 import { HoverAction } from "../text/HoverAction";
 import { ClickAction } from "../text/ClickAction";
 import { ClickEvent } from "../text/ClickEvent";
+import { Item } from "../client/Item";
 
 @customElement("mc-text")
 export class McText extends Component {
@@ -76,6 +77,35 @@ export class McText extends Component {
     return { styles, classes };
   }
 
+  private tooltipHandlers(tooltipId: string) {
+    return {
+      mouseenter: () => {
+        const tip = this.renderRoot.querySelector(`#${tooltipId}`);
+        if (tip instanceof HTMLElement) tip.classList.remove("hidden");
+      },
+      mouseleave: () => {
+        const tip = this.renderRoot.querySelector(`#${tooltipId}`);
+        if (tip instanceof HTMLElement) tip.classList.add("hidden");
+      },
+      mousemove: (e: MouseEvent) => {
+        const tip = this.renderRoot.querySelector(`#${tooltipId}`);
+        if (tip instanceof HTMLElement) {
+          const tooltipHeight = tip.offsetHeight;
+          let top = e.clientY + 12;
+          if (top < 0) {
+            top = 0;
+          }
+          const maxTop = window.innerHeight - tooltipHeight;
+          if (top > maxTop) {
+            top = maxTop;
+          }
+          tip.style.left = `${e.clientX + 12}px`;
+          tip.style.top = `${top}px`;
+        }
+      },
+    };
+  }
+
   public render(): TemplateResult {
     let parsed: unknown;
     try {
@@ -95,6 +125,10 @@ export class McText extends Component {
       classes.push("cursor-pointer");
     }
 
+    const handlers = hasHover
+      ? this.tooltipHandlers(tooltipId as string)
+      : null;
+
     const inner = html`
       ${this.resolveContent(component)}${component.extra?.map((child) =>
         html`
@@ -102,7 +136,11 @@ export class McText extends Component {
         `
       )}${hasHover
         ? html`
-          <div id="${tooltipId as string}" role="tooltip" class="hidden fixed">
+          <div
+            id="${tooltipId as string}"
+            role="tooltip"
+            class="fixed hidden rounded-md bg-zinc-950/80 backdrop-blur px-2 py-1 ring ring-inset ring-white/5 shadow"
+          >
             ${this.renderHover(component)}
           </div>
         `
@@ -118,6 +156,9 @@ export class McText extends Component {
           style="${styleMap(styles)}"
           class="${classes.join(" ") ?? nothing}"
           aria-describedby="${hasHover ? tooltipId : nothing}"
+          @mouseenter="${handlers?.mouseenter ?? nothing}"
+          @mouseleave="${handlers?.mouseleave ?? nothing}"
+          @mousemove="${handlers?.mousemove ?? nothing}"
         >${inner}</a>
       `;
     }
@@ -130,6 +171,9 @@ export class McText extends Component {
         @click="${clickEvent
           ? () => McText.handleClick(this, clickEvent)
           : nothing}"
+        @mouseenter="${handlers?.mouseenter ?? nothing}"
+        @mouseleave="${handlers?.mouseleave ?? nothing}"
+        @mousemove="${handlers?.mousemove ?? nothing}"
       >${inner}</span>
     `;
   }
@@ -145,7 +189,10 @@ export class McText extends Component {
     }
     if (hoverEvent.action === HoverAction.SHOW_ITEM) {
       return html`
-        ${hoverEvent.id}
+        <mc-text json="${JSON.stringify(
+          new Item(hoverEvent.id, hoverEvent.count, hoverEvent.components)
+            .tooltip(),
+        )}"></mc-text></p>
       `;
     }
     if (hoverEvent.action === HoverAction.SHOW_ENTITY) {
