@@ -12,13 +12,17 @@ export class PlayerConsole extends Component {
   private readonly in = createRef<HTMLInputElement>();
   private readonly inputConsumer: (input: string) => unknown;
   private lifeCycle: AbortController | null = null;
+  public readonly history: string[];
+  private historyCurrent: string = "";
+  private historyIndex: number = -1;
 
   @property({ type: Boolean })
   public disabled = false;
 
-  public constructor(inputConsumer: (input: string) => unknown = () => {}) {
+  public constructor(inputConsumer: (input: string) => unknown = () => {}, history: string[] = []) {
     super();
     this.inputConsumer = inputConsumer;
+    this.history = history;
   }
 
   public override connectedCallback() {
@@ -98,7 +102,13 @@ export class PlayerConsole extends Component {
         if (this.in.value === undefined) {
           return;
         }
-        this.inputConsumer(this.in.value.value.trim());
+        const message = this.in.value.value.trim();
+        this.inputConsumer(message);
+        const last = this.history.at(-1);
+        if (last !== message) {
+          this.history.push(message);
+        }
+        this.historyIndex = -1;
         this.in.value.value = "";
       }}">
         <input
@@ -109,6 +119,36 @@ export class PlayerConsole extends Component {
           placeholder="${this.disabled
             ? nothing
             : "Type to chat or run commands"}"
+          @keydown="${(e: KeyboardEvent) => {
+            const input = e.target as HTMLInputElement;
+            switch (e.key) {
+              case "ArrowUp": {
+                if (this.historyIndex === -1) {
+                  this.historyCurrent = input.value;
+                }
+                if (this.historyIndex >= this.history.length - 1) {
+                  return;
+                }
+                e.preventDefault();
+                ++this.historyIndex;
+                input.value = this.history[this.history.length - this.historyIndex - 1];
+                break;
+              }
+              case "ArrowDown": {
+                if (this.historyIndex <= -1) {
+                  return;
+                }
+                e.preventDefault();
+                --this.historyIndex;
+                if (this.historyIndex === -1) {
+                  input.value = this.historyCurrent;
+                  return;
+                }
+                input.value = this.history[this.history.length - this.historyIndex - 1];
+                break;
+              }
+            }
+          }}"
         />
         <input type="submit" class="sr-only">
       </form>
