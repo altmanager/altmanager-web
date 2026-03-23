@@ -257,7 +257,7 @@ export class McText extends Component {
 
   private static handleClick(el: McText, clickEvent: ClickEvent): void {
     if (clickEvent.action === ClickAction.COPY_TO_CLIPBOARD) {
-      navigator.clipboard.writeText(clickEvent.value);
+      navigator.clipboard.writeText(clickEvent.value).then();
       return;
     }
     el.dispatchEvent(
