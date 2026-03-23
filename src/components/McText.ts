@@ -87,7 +87,7 @@ export class McText extends Component {
 
     const component = McText.parse(parsed);
     const { styles = {}, classes = [] } = this.styleComponent(component);
-    const hasHover = !!component.hover_event;
+    const hasHover = component.hover_event !== undefined;
     const tooltipId = hasHover ? `mc-hover-${++McText.idCounter}` : nothing;
 
     return html`
