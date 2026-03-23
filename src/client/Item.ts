@@ -246,7 +246,8 @@ export class Item {
         const id = modifier.type.startsWith(Item.DEFAULT_NAMESPACE)
           ? modifier.type.slice(Item.DEFAULT_NAMESPACE.length)
           : modifier.type;
-        const benefit = Item.ATTRIBUTE_BENEFIT[id as keyof typeof Item.ATTRIBUTE_BENEFIT] + 1;
+        const benefit =
+          Item.ATTRIBUTE_BENEFIT[id as keyof typeof Item.ATTRIBUTE_BENEFIT] + 1;
         const colors = ["red", "gray", "blue"];
         const color = modifier.amount > 0
           ? colors[benefit]
