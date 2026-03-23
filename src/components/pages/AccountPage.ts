@@ -13,6 +13,8 @@ import { PlayerConsole } from "../PlayerConsole";
 
 @customElement("account-page")
 export class AccountPage extends Page {
+  private static readonly consoles = new Map<string, PlayerConsole>();
+
   @state()
   private account?: Account | null;
 
@@ -39,12 +41,15 @@ export class AccountPage extends Page {
 
     this.uuid = match.data.uuid;
     this.api.getAccount(match.data.uuid).then();
-    this.console = new PlayerConsole((input) => {
-      if (this.account === null || this.account === undefined) {
-        return;
-      }
-      this.api.sendChat(this.account, input);
-    });
+    if (!AccountPage.consoles.has(this.uuid)) {
+      AccountPage.consoles.set(this.uuid, new PlayerConsole((input) => {
+        if (this.account === null || this.account === undefined) {
+          return;
+        }
+        this.api.sendChat(this.account, input);
+      }));
+    }
+    this.console = AccountPage.consoles.get(this.uuid)!;
     this.console.disabled = true;
   }
 
@@ -61,10 +66,11 @@ export class AccountPage extends Page {
     });
 
     this.api.addEventListener("chat", (e) => {
-      if (e.detail.account !== this.uuid) {
+      const console = AccountPage.consoles.get(e.detail.account);
+      if (console === undefined) {
         return;
       }
-      this.console?.write(e.detail.message);
+      console.write(e.detail.message);
     });
 
     this.connectModal.addEventListener("toggle", (e) => {
