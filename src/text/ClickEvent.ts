@@ -8,4 +8,4 @@ export type ClickEvent =
   | { action: ClickAction.CHANGE_PAGE; page: number }
   | { action: ClickAction.COPY_TO_CLIPBOARD; value: string }
   | { action: ClickAction.SHOW_DIALOG; dialog: string | object }
-  | { action: ClickAction.CUSTOM; id: string; payload?: string | object };
+  | { action: ClickAction.CUSTOM; id: string; payload?: string };
