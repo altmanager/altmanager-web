@@ -12,6 +12,6 @@ export type HoverEvent =
   | {
     action: HoverAction.SHOW_ENTITY;
     id: string;
-    uuid: string | number[];
+    uuid: string | [number, number, number, number];
     name?: TextComponent;
   };

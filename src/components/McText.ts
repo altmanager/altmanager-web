@@ -40,6 +40,30 @@ export class McText extends Component {
   @property({ type: String })
   public json: string = "";
 
+  private static uuidToString(uuid: string | [number, number, number, number]): string {
+    const hex = typeof uuid === "string"
+      ? uuid.replaceAll("-", "")
+      : Array.from(
+        new Uint8Array(
+          uuid.flatMap((value) => [
+            (value >>> 24) & 0xff,
+            (value >>> 16) & 0xff,
+            (value >>> 8) & 0xff,
+            value & 0xff,
+          ])
+        )
+      )
+        .map((b) => b.toString(16).padStart(2, "0"))
+        .join("");
+
+    return [
+      hex.slice(0, 8),
+      hex.slice(8, 12),
+      hex.slice(12, 16),
+      hex.slice(16, 20),
+    ].join("-");
+  }
+
   protected styleComponent(
     component: TextComponent,
   ): { styles?: Record<string, string>; classes?: string[] } {
@@ -204,7 +228,7 @@ export class McText extends Component {
               hoverEvent.name,
               "\n",
               {
-                text: hoverEvent.uuid,
+                text: McText.uuidToString(hoverEvent.uuid),
                 color: "dark_gray",
               },
             ],
