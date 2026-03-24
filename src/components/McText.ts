@@ -40,7 +40,9 @@ export class McText extends Component {
   @property({ type: String })
   public json: string = "";
 
-  private static uuidToString(uuid: string | [number, number, number, number]): string {
+  private static uuidToString(
+    uuid: string | [number, number, number, number],
+  ): string {
     const hex = typeof uuid === "string"
       ? uuid.replaceAll("-", "")
       : Array.from(
@@ -50,8 +52,8 @@ export class McText extends Component {
             (value >>> 16) & 0xff,
             (value >>> 8) & 0xff,
             value & 0xff,
-          ])
-        )
+          ]),
+        ),
       )
         .map((b) => b.toString(16).padStart(2, "0"))
         .join("");

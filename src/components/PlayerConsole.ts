@@ -19,7 +19,10 @@ export class PlayerConsole extends Component {
   @property({ type: Boolean })
   public disabled = false;
 
-  public constructor(inputConsumer: (input: string) => unknown = () => {}, history: string[] = []) {
+  public constructor(
+    inputConsumer: (input: string) => unknown = () => {},
+    history: string[] = [],
+  ) {
     super();
     this.inputConsumer = inputConsumer;
     this.history = history;
@@ -134,7 +137,8 @@ export class PlayerConsole extends Component {
                 }
                 e.preventDefault();
                 ++this.historyIndex;
-                input.value = this.history[this.history.length - this.historyIndex - 1];
+                input.value =
+                  this.history[this.history.length - this.historyIndex - 1];
                 break;
               }
               case "ArrowDown": {
@@ -147,7 +151,8 @@ export class PlayerConsole extends Component {
                   input.value = this.historyCurrent;
                   return;
                 }
-                input.value = this.history[this.history.length - this.historyIndex - 1];
+                input.value =
+                  this.history[this.history.length - this.historyIndex - 1];
                 break;
               }
             }

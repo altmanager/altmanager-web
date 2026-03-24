@@ -42,15 +42,22 @@ export class AccountPage extends Page {
     this.uuid = match.data.uuid;
     this.api.getAccount(match.data.uuid).then();
     if (!AccountPage.consoles.has(this.uuid)) {
-      const console = new PlayerConsole((input) => {
-        if (this.account === null || this.account === undefined) {
-          return;
-        }
-        this.api.sendChat(this.account, input);
-      }, JSON.parse(localStorage.getItem("consoleInputHistory") ?? "{}")[this.uuid!]);
+      const console = new PlayerConsole(
+        (input) => {
+          if (this.account === null || this.account === undefined) {
+            return;
+          }
+          this.api.sendChat(this.account, input);
+        },
+        JSON.parse(
+          localStorage.getItem("consoleInputHistory") ?? "{}",
+        )[this.uuid!],
+      );
       AccountPage.consoles.set(this.uuid, console);
       console.addEventListener("submit", (e) => {
-        const history = JSON.parse(localStorage.getItem("consoleInputHistory") ?? "{}");
+        const history = JSON.parse(
+          localStorage.getItem("consoleInputHistory") ?? "{}",
+        );
         history[this.uuid!] = console.history.slice(-100);
         localStorage.setItem("consoleInputHistory", JSON.stringify(history));
       });
@@ -214,7 +221,7 @@ export class AccountPage extends Page {
                   `
                   : nothing}
                 <div class="mt-1 flex ${this.account.status ===
-                AccountStatus.ONLINE
+                    AccountStatus.ONLINE
                   ? "flex"
                   : "hidden"}" aria-label="health: 15">
                   <svg
