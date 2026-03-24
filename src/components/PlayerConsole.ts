@@ -84,7 +84,10 @@ export class PlayerConsole extends Component {
     mcText.json = JSON.stringify(message);
     const line = document.createElement("p");
     if (channel !== undefined) {
-      line.textContent = `[${channel}] `;
+      const span = document.createElement("span");
+      span.classList.add("text-zinc-400");
+      span.textContent = `[${channel}] `;
+      line.append(span);
     }
     line.append(mcText);
     out.prepend(line);

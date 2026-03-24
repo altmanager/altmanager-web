@@ -79,6 +79,14 @@ export class AccountPage extends Page {
       console.write(e.detail.message);
     });
 
+    this.api.addEventListener("kick", (e) => {
+      const console = AccountPage.consoles.get(e.detail.account);
+      if (console === undefined) {
+        return;
+      }
+      console.write(e.detail.reason, "Kicked");
+    });
+
     this.connectModal.addEventListener("toggle", (e) => {
       if (e.newState !== "open") {
         return;
