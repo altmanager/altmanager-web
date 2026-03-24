@@ -160,6 +160,13 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
         this.dispatchEvent("chat", { account, message: chat });
         break;
       }
+      case "player:kick": {
+        const { account, reason } = message as {
+          account: string;
+          reason: unknown;
+        };
+        this.dispatchEvent("kick", { account, reason });
+      }
     }
   }
 }
