@@ -102,13 +102,21 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
             skinUrl: string;
             status: AccountStatus;
             lastServer: string | null;
+            onlineSince: string | null;
           }
         >;
         this.accounts.clear();
         for (const a of raw) {
           this.accounts.set(
             a.uuid,
-            new Account(a.uuid, a.username, a.skinUrl, a.status, a.lastServer),
+            new Account(
+              a.uuid,
+              a.username,
+              a.skinUrl,
+              a.status,
+              a.lastServer,
+              a.onlineSince === null ? null : new Date(a.onlineSince),
+            ),
           );
         }
         this.dispatchEvent("accountList", Array.from(this.accounts.values()));
@@ -122,6 +130,7 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
             skinUrl: string;
             status: AccountStatus;
             lastServer: string | null;
+            onlineSince: string | null;
           } | null;
           request: string;
         };
@@ -139,6 +148,9 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
           raw.account.skinUrl,
           raw.account.status,
           raw.account.lastServer,
+          raw.account.onlineSince === null
+            ? null
+            : new Date(raw.account.onlineSince),
         );
         this.accounts.set(account.uuid, account);
         this.dispatchEvent("account", { account, requested: raw.request });
