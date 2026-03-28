@@ -100,6 +100,7 @@ export class PlayerConsole extends Component {
     return html`
       <div
         ${ref(this.out)}
+        aria-live="polite"
         class="flex h-96 flex-col-reverse overflow-auto rounded-t-xl border border-b-0 border-white/10 bg-zinc-950 p-2 font-mono text-sm text-zinc-200"
       >
       </div>
