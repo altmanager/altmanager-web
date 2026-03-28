@@ -6,6 +6,7 @@ export class Account {
   public readonly skinUrl: string;
   public readonly status: AccountStatus;
   public readonly lastServer: string | null;
+  public readonly onlineSince: Date | null;
 
   public constructor(
     uuid: string,
@@ -13,11 +14,13 @@ export class Account {
     skinUrl: string,
     status: AccountStatus,
     lastServer: string | null,
+    onlineSince: Date | null,
   ) {
     this.uuid = uuid;
     this.username = username;
     this.skinUrl = skinUrl;
     this.status = status;
     this.lastServer = lastServer;
+    this.onlineSince = onlineSince;
   }
 }

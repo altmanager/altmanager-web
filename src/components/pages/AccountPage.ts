@@ -10,9 +10,17 @@ import { createRef, ref } from "lit/directives/ref.js";
 import { ClickEvent } from "../../text/ClickEvent";
 import { PlayerConsole } from "../PlayerConsole";
 import { McText } from "../McText";
+import { ElapsedClock } from "../ElapsedClock";
 
 @customElement("account-page")
 export class AccountPage extends Page {
+  private static readonly PING_COLORS = {
+    50: "text-green-400",
+    100: "text-lime-400",
+    150: "text-amber-400",
+    200: "text-orange-400",
+  };
+
   private static readonly consoles = new Map<string, PlayerConsole>();
   private static readonly playerLists = new Map<string, {
     uuid: string;
@@ -51,13 +59,6 @@ export class AccountPage extends Page {
     super("/p/:uuid");
     this.api = api;
   }
-
-  private static readonly PING_COLORS = {
-    50: "text-green-400",
-    100: "text-lime-400",
-    150: "text-amber-400",
-    200: "text-orange-400",
-  };
 
   private static pingColor(ping: number): string {
     for (const [max, color] of Object.entries(this.PING_COLORS)) {
@@ -393,10 +394,12 @@ export class AccountPage extends Page {
                     <p class="mt-1 text-sm text-zinc-400">
                       <span class="sr-only">Client version </span>1.21.11
                     </p>
-                    <p class="mt-1 text-sm text-zinc-400 tabular-nums">
-                      <span class="sr-only">Online for</span>
-                      <time datetime="PT0M0S">0:00</time>
-                    </p>
+                    ${this.account.onlineSince === null ? nothing : html`
+                      <p class="mt-1 text-sm text-zinc-400 tabular-nums">
+                        <span class="sr-only">Online for</span>
+                        ${new ElapsedClock(this.account.onlineSince)}
+                      </p>
+                    `}
                   </div>
                 </div>
 
