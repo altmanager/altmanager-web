@@ -166,7 +166,7 @@ export class McText extends Component {
           <div
             id="${tooltipId as string}"
             role="tooltip"
-            class="fixed hidden rounded-md bg-zinc-950/80 backdrop-blur px-2 py-1 ring ring-inset ring-white/5 shadow"
+            class="fixed hidden rounded-md text-white bg-zinc-950/80 backdrop-blur px-2 py-1 ring ring-inset ring-white/5 shadow"
           >
             ${this.renderHover(component)}
           </div>
