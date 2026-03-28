@@ -166,6 +166,24 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
           reason: unknown;
         };
         this.dispatchEvent("kick", { account, reason });
+        break;
+      }
+      case "player:server-players-list": {
+        const { account, players } = message as {
+          account: string;
+          players: {
+            uuid: string;
+            name: string;
+            displayName: unknown;
+            ping: number;
+            priority: number;
+            gamemode: number;
+            listed: boolean;
+          }[];
+        };
+
+        this.dispatchEvent("playerList", { account, players });
+        break;
       }
     }
   }

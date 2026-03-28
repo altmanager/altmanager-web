@@ -21,6 +21,9 @@ export abstract class Page extends Component {
 
   public onOpen(match?: Match) {
     this.focusPage();
+    setTimeout(() => {
+      this.querySelector<HTMLElement>("[autofocus]")?.focus();
+    }, 50);
   }
 
   private focusPage() {

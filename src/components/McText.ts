@@ -38,7 +38,12 @@ export class McText extends Component {
   private static idCounter = 0;
 
   @property({ type: String })
-  public json: string = "";
+  public json: string;
+
+  public constructor(json: string = "") {
+    super();
+    this.json = json;
+  }
 
   private static uuidToString(
     uuid: string | [number, number, number, number],
@@ -244,7 +249,9 @@ export class McText extends Component {
 
   private resolveContent(component: TextComponent): TemplateResult | string {
     if ("text" in component) {
-      if (component.font !== undefined && component.font !== "minecraft:default") {
+      if (
+        component.font !== undefined && component.font !== "minecraft:default"
+      ) {
         return "";
       }
       return McText.renderText((component as LiteralTextComponent).text);
