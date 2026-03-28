@@ -133,14 +133,12 @@ export class McText extends Component {
     };
   }
 
-  public render(): TemplateResult {
+  public override render() {
     let parsed: unknown;
     try {
       parsed = JSON.parse(this.json);
     } catch {
-      return html`
-        &#xFFFD;
-      `;
+      return nothing;
     }
 
     const component = McText.parse(parsed);
@@ -246,6 +244,9 @@ export class McText extends Component {
 
   private resolveContent(component: TextComponent): TemplateResult | string {
     if ("text" in component) {
+      if (component.font !== undefined && component.font !== "minecraft:default") {
+        return "";
+      }
       return McText.renderText((component as LiteralTextComponent).text);
     }
     if ("translate" in component) {
@@ -264,7 +265,7 @@ export class McText extends Component {
     if ("nbt" in component) {
       return McText.renderText((component as NbtTextComponent).nbt);
     }
-    return "\uFFFD";
+    return "";
   }
 
   private resolveTranslate(
@@ -300,7 +301,9 @@ export class McText extends Component {
   }
 
   private static renderText(text: string): TemplateResult {
-    const lines = text.split("\n");
+    const lines = text
+      .replaceAll("\uFFFD", "")
+      .split("\n");
     return html`
       ${lines.map((line, i) =>
         html`
