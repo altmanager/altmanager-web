@@ -103,7 +103,15 @@ export class AccountPage extends Page {
       });
     }
     this.console = AccountPage.consoles.get(this.uuid)!;
+    const console = this.console;
     this.console.disabled = true;
+    this.api.getChatHistory(this.uuid).then((h) => {
+      const since = console.disconnectedTime?.getTime() ?? null;
+      const messages = since === null ? h : h.filter((m) => m.time > since);
+      for (const entry of messages) {
+        console.write(entry.message);
+      }
+    });
     this.playerList = AccountPage.playerLists.get(this.uuid) ?? [];
     this.ping = this.playerList.find((p) =>
       p.uuid.replaceAll("-", "") === this.uuid?.replaceAll("-", "")
