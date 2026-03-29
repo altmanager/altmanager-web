@@ -198,7 +198,7 @@ export class AccountPage extends Page {
                       <p class="mt-1 text-sm text-zinc-400">Offline</p>
                     `
                     : nothing}
-                  <div class="mt-1 flex ${this.account.status ===
+                  <div class="mt-1 ${this.account.status ===
                       AccountStatus.ONLINE
                     ? "flex"
                     : "hidden"}" aria-label="health: 15">
@@ -409,30 +409,32 @@ export class AccountPage extends Page {
                     <p class="text-zinc-400 tabular-nums text-sm">${this
                       .playerList.filter((p) => p.listed).length}</p>
                   </div>
-                  <div class="rounded-xl bg-zinc-800 p-4">
+                  <div class="rounded-xl bg-zinc-800 p-4 max-h-104 overflow-auto">
                     ${this.playerList.length === 0
                       ? html`
                         <p class="italic text-zinc-500 text-center text-sm">None?</p>
                       `
-                      : this.playerList.filter((p) => p.listed).map((p) =>
-                        html`
-                          <li class="flex justify-between items-center">
-                            <p class="text-white font-medium">
-                              <span class="sr-only">Username: </span>${p
-                                  .displayName === undefined
-                                ? p.name
-                                : new McText(JSON.stringify(p.displayName))}
-                            </p>
-                            <div class="flex">
-                              <p class="text-sm tabular-nums ${AccountPage
-                                .pingColor(p.ping)}">
-                                <span class="sr-only">Latency: </span>${p
-                                  .ping} ms
+                      : html`
+                        <ol>${this.playerList.filter((p) => p.listed).map((p) =>
+                          html`
+                            <li class="flex justify-between items-center">
+                              <p class="text-white font-medium">
+                                <span class="sr-only">Username: </span>${p
+                                    .displayName === undefined
+                                  ? p.name
+                                  : new McText(JSON.stringify(p.displayName))}
                               </p>
-                            </div>
-                          </li>
-                        `
-                      )}
+                              <div class="flex">
+                                <p class="text-sm tabular-nums ${AccountPage
+                                  .pingColor(p.ping)}">
+                                  <span class="sr-only">Latency: </span>${p
+                                    .ping} ms
+                                </p>
+                              </div>
+                            </li>
+                          `
+                        )}</ol>
+                      `}
                   </div>
                 </div>
               `
