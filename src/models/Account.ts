@@ -7,6 +7,7 @@ export class Account {
   public readonly status: AccountStatus;
   public readonly lastServer: string | null;
   public readonly onlineSince: Date | null;
+  public readonly health: number | null;
 
   public constructor(
     uuid: string,
@@ -15,6 +16,7 @@ export class Account {
     status: AccountStatus,
     lastServer: string | null,
     onlineSince: Date | null,
+    health: number | null,
   ) {
     this.uuid = uuid;
     this.username = username;
@@ -22,5 +24,6 @@ export class Account {
     this.status = status;
     this.lastServer = lastServer;
     this.onlineSince = onlineSince;
+    this.health = health;
   }
 }

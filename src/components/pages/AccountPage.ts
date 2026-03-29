@@ -11,6 +11,7 @@ import { ClickEvent } from "../../text/ClickEvent";
 import { PlayerConsole } from "../PlayerConsole";
 import { McText } from "../McText";
 import { ElapsedClock } from "../ElapsedClock";
+import { PlayerHealth } from "../PlayerHealth";
 
 @customElement("account-page")
 export class AccountPage extends Page {
@@ -197,122 +198,14 @@ export class AccountPage extends Page {
                     ? html`
                       <p class="mt-1 text-sm text-zinc-400">Offline</p>
                     `
+                    : nothing}${this.account.status === AccountStatus.ONLINE &&
+                      this.account.health !== null
+                    ? html`
+                      <div class="mt-1">
+                        ${new PlayerHealth(this.account.health)}
+                      </div>
+                    `
                     : nothing}
-                  <div class="mt-1 ${this.account.status ===
-                      AccountStatus.ONLINE
-                    ? "flex"
-                    : "hidden"}" aria-label="health: 15">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-red-400"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M178,40c-20.65,0-38.73,8.88-50,23.89C116.73,48.88,98.65,40,78,40a62.07,62.07,0,0,0-62,62c0,70,103.79,126.67,108.21,129a8,8,0,0,0,7.58,0C136.21,228.67,240,172,240,102A62.07,62.07,0,0,0,178,40ZM128,214.8V104a48,48,0,0,1,41.61-47.56A83.85,83.85,0,0,1,178,56a46.06,46.06,0,0,1,46,46C224,155.61,146.25,204.15,128,214.8Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-zinc-600"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="size-4 fill-zinc-600"
-                      viewBox="0 0 256 256"
-                      aria-hidden="true"
-                    >
-                      <path
-                        d="M240,102c0,70-103.79,126.66-108.21,129a8,8,0,0,1-7.58,0C119.79,228.66,16,172,16,102A62.07,62.07,0,0,1,78,40c20.65,0,38.73,8.88,50,23.89C139.27,48.88,157.35,40,178,40A62.07,62.07,0,0,1,240,102Z"
-                      >
-                      </path>
-                    </svg>
-                  </div>
                 </div>
               </div>
               <div class="flex items-center gap-2">

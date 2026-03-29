@@ -325,8 +325,8 @@ export class McText extends Component {
   }
 
   private static parse(raw: unknown): TextComponent {
-    if (typeof raw === "string") {
-      return { text: raw } as LiteralTextComponent;
+    if (typeof raw === "string" || typeof raw === "number") {
+      return { text: String(raw) } as LiteralTextComponent;
     }
     if (Array.isArray(raw)) {
       return { extra: raw as TextComponent[] } as LiteralTextComponent;
