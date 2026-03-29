@@ -25,3 +25,9 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+
+      - name: Check formatting
+        run: deno fmt --check
