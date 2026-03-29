@@ -7,6 +7,7 @@ import { Account } from "../../models/Account";
 import { WsClient } from "../../api/WsClient";
 import { Modal } from "../Modal";
 import { AccountStatus } from "../../models/AccountStatus";
+import { ElapsedClock } from "../ElapsedClock";
 
 @customElement("home-page")
 export class HomePage extends Page {
@@ -217,7 +218,8 @@ export class HomePage extends Page {
                             .username}<span class="absolute inset-0"></span></a>
                           ${a.status === AccountStatus.DISCONNECTED
                             ? html`
-                              <p class="text-xs text-neutral-400">Offline</p>
+                              <p class="text-xs text-neutral-400">${HomePage
+                                .STATUSES[AccountStatus.DISCONNECTED].label}</p>
                             `
                             : nothing}
                           <div class="mt-1 ${a.status ===
@@ -345,14 +347,19 @@ export class HomePage extends Page {
                               AccountStatus.DISCONNECTED
                             ? nothing
                             : html`
-                              <div class="mt-1 flex items-center gap-x-1.5">
+                              <div class="mt-1 flex items-center gap-x-2">
                                 <div
                                   class="size-1.5 rounded-full ${HomePage
                                     .STATUSES[a.status].style}"
                                 >
                                 </div>
-                                <p class="text-xs/5 text-zinc-400">
-                                  ${HomePage.STATUSES[a.status].label}
+                                <p class="text-xs/5 text-zinc-400 tabular-nums">
+                                  ${HomePage.STATUSES[a.status]
+                                    .label} ${a.onlineSince === null
+                                    ? nothing
+                                    : html`
+                                      for ${new ElapsedClock(a.onlineSince)}
+                                    `}
                                 </p>
                               </div>
                             `}
