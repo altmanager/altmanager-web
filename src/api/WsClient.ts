@@ -57,6 +57,30 @@ export class WsClient extends TypedEventTarget<WsClientEvents> {
     });
   }
 
+  public getChatHistory(
+    uuid: string,
+  ): Promise<{ time: number; message: unknown }[]> {
+    return new Promise((resolve) => {
+      this.socket.send(
+        JSON.stringify({ type: "player:chat-history", account: uuid }),
+      );
+
+      const done = new AbortController();
+      this.socket.addEventListener("message", (event) => {
+        const message = JSON.parse(event.data);
+        if (
+          message.type !== "player:chat-history" ||
+          message.account !== uuid
+        ) {
+          return;
+        }
+
+        resolve(message.history);
+        done.abort();
+      }, { signal: done.signal });
+    });
+  }
+
   public addAccount(): Promise<{ verificationUri: string; userCode: string }> {
     return new Promise((resolve) => {
       this.socket.send(JSON.stringify({ type: "accounts:add" }));

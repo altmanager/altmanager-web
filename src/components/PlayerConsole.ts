@@ -15,6 +15,7 @@ export class PlayerConsole extends Component {
   public readonly history: string[];
   private historyCurrent: string = "";
   private historyIndex: number = -1;
+  #disconnectedTime: Date | null = null;
 
   @property({ type: Boolean })
   public disabled = false;
@@ -26,6 +27,10 @@ export class PlayerConsole extends Component {
     super();
     this.inputConsumer = inputConsumer;
     this.history = history;
+  }
+
+  public get disconnectedTime() {
+    return this.#disconnectedTime;
   }
 
   public override connectedCallback() {
@@ -48,6 +53,7 @@ export class PlayerConsole extends Component {
 
   public override disconnectedCallback() {
     super.disconnectedCallback();
+    this.#disconnectedTime = new Date();
     this.lifeCycle?.abort();
   }
 
