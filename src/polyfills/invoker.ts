@@ -9,13 +9,15 @@ if (!("command" in document.createElement("button"))) {
   interface InvokerCommandEvent extends Event, InvokerCommand {}
 
   interface CommandEventConstructor {
-    new(type: string, init?: CommandEventInit): InvokerCommandEvent;
+    new (type: string, init?: CommandEventInit): InvokerCommandEvent;
   }
 
-  const polyfillWindow = window as typeof window & { CommandEvent: CommandEventConstructor };
+  const polyfillWindow = window as typeof window & {
+    CommandEvent: CommandEventConstructor;
+  };
 
   if (!("CommandEvent" in window)) {
-    polyfillWindow.CommandEvent = class CommandEvent extends Event implements InvokerCommandEvent {
+    class CommandEvent extends Event implements InvokerCommandEvent {
       public readonly command: string;
       public readonly source: HTMLButtonElement | null;
 
@@ -24,7 +26,9 @@ if (!("command" in document.createElement("button"))) {
         this.command = init.command ?? "";
         this.source = init.source ?? null;
       }
-    };
+    }
+
+    polyfillWindow.CommandEvent = CommandEvent;
   }
 
   document.addEventListener("click", (e) => {
