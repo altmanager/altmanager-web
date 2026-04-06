@@ -75,7 +75,7 @@ if (!("command" in document.createElement("button"))) {
           bubbles: true,
           cancelable: true,
           composed: true,
-          command: command,
+          command,
           source: btn,
         });
 
