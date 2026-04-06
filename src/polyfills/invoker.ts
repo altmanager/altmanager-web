@@ -70,6 +70,10 @@ if (!("command" in document.createElement("button"))) {
   };
 
   document.addEventListener("click", (e) => {
+    if (e.defaultPrevented) {
+      return;
+    }
+
     if (!(e.target instanceof Element)) {
       return;
     }
