@@ -31,6 +31,44 @@ if (!("command" in document.createElement("button"))) {
     polyfillWindow.CommandEvent = CommandEvent;
   }
 
+  const builtInActions: Record<
+    string,
+    (target: HTMLElement, btn: HTMLButtonElement) => void
+  > = {
+    "show-modal": (t) => {
+      if (t instanceof HTMLDialogElement) {
+        t.showModal();
+      }
+    },
+    "close": (t, btn) => {
+      if (t instanceof HTMLDialogElement) {
+        t.returnValue = btn.value;
+        t.close();
+      }
+    },
+    "request-close": (t, btn) => {
+      if (t instanceof HTMLDialogElement) {
+        t.returnValue = btn.value;
+        t.requestClose();
+      }
+    },
+    "show-popover": (t) => {
+      if (t instanceof HTMLElement) {
+        t.showPopover();
+      }
+    },
+    "hide-popover": (t) => {
+      if (t instanceof HTMLElement) {
+        t.hidePopover();
+      }
+    },
+    "toggle-popover": (t) => {
+      if (t instanceof HTMLElement) {
+        t.togglePopover();
+      }
+    },
+  };
+
   document.addEventListener("click", (e) => {
     if (!(e.target instanceof Element)) {
       return;
@@ -53,61 +91,27 @@ if (!("command" in document.createElement("button"))) {
       return;
     }
 
-    switch (command) {
-      case "show-modal": {
-        if (target instanceof HTMLDialogElement) {
-          target.showModal();
-        }
-        break;
-      }
-      case "close": {
-        if (target instanceof HTMLDialogElement) {
-          target.returnValue = btn.value;
-          target.close();
-        }
-        break;
-      }
-      case "request-close": {
-        if (target instanceof HTMLDialogElement) {
-          target.returnValue = btn.value;
-          target.requestClose();
-        }
-        break;
-      }
-      case "show-popover": {
-        if (target instanceof HTMLElement) {
-          target.showPopover();
-        }
-        break;
-      }
-      case "hide-popover": {
-        if (target instanceof HTMLElement) {
-          target.hidePopover();
-        }
-        break;
-      }
-      case "toggle-popover": {
-        if (target instanceof HTMLElement) {
-          target.togglePopover();
-        }
-        break;
-      }
-      default: {
-        if (!command.startsWith("--")) {
-          return;
-        }
+    const action = builtInActions[command];
+    const isCustom = command.startsWith("--");
 
-        const event = new polyfillWindow.CommandEvent("command", {
-          bubbles: true,
-          cancelable: true,
-          composed: true,
-          command,
-          source: btn,
-        });
-
-        target.dispatchEvent(event);
-        break;
-      }
+    if (action === undefined && !isCustom) {
+      return;
     }
+
+    const event = new polyfillWindow.CommandEvent("command", {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      command,
+      source: btn,
+    });
+
+    target.dispatchEvent(event);
+
+    if (event.defaultPrevented) {
+      return;
+    }
+
+    action?.(target, btn);
   });
 }
