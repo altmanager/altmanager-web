@@ -91,7 +91,7 @@ if (!("command" in document.createElement("button"))) {
     }
 
     const target = document.getElementById(commandFor);
-    if (target === null) {
+    if (target === null || !target.isConnected) {
       return;
     }
 
