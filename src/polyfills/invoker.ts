@@ -63,6 +63,13 @@ if (!("command" in document.createElement("button"))) {
         }
         break;
       }
+      case "request-close": {
+        if (target instanceof HTMLDialogElement) {
+          target.returnValue = btn.value;
+          target.requestClose();
+        }
+        break;
+      }
       case "show-popover": {
         if (target instanceof HTMLElement) {
           target.showPopover();
