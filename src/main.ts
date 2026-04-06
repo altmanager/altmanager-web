@@ -106,8 +106,13 @@ document.body.append(root);
 
 if (!("command" in document.createElement("button"))) {
   document.addEventListener("click", (e) => {
-    const btn = e.target;
-    if (!(btn instanceof HTMLButtonElement)) {
+    if (!(e.target instanceof Element)) {
+      return;
+    }
+
+    const btn = e.target.closest<HTMLButtonElement>("button");
+
+    if (btn === null) {
       return;
     }
 
