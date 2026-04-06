@@ -1,4 +1,32 @@
 if (!("command" in document.createElement("button"))) {
+  interface InvokerCommand {
+    command: string;
+    source: HTMLButtonElement | null;
+  }
+
+  interface CommandEventInit extends EventInit, Partial<InvokerCommand> {}
+
+  interface InvokerCommandEvent extends Event, InvokerCommand {}
+
+  interface CommandEventConstructor {
+    new(type: string, init?: CommandEventInit): InvokerCommandEvent;
+  }
+
+  const polyfillWindow = window as typeof window & { CommandEvent: CommandEventConstructor };
+
+  if (!("CommandEvent" in window)) {
+    polyfillWindow.CommandEvent = class CommandEvent extends Event implements InvokerCommandEvent {
+      public readonly command: string;
+      public readonly source: HTMLButtonElement | null;
+
+      public constructor(type: string, init: CommandEventInit = {}) {
+        super(type, init);
+        this.command = init.command ?? "";
+        this.source = init.source ?? null;
+      }
+    };
+  }
+
   document.addEventListener("click", (e) => {
     if (!(e.target instanceof Element)) {
       return;
@@ -54,24 +82,11 @@ if (!("command" in document.createElement("button"))) {
         break;
       }
       default: {
-        if (!command.startsWith("--") || !("CommandEvent" in window)) {
+        if (!command.startsWith("--")) {
           return;
         }
 
-        const CommandEventClass = window.CommandEvent as {
-          new (
-            type: string,
-            init?: {
-              bubbles?: boolean;
-              cancelable?: boolean;
-              composed?: boolean;
-              command?: string;
-              source?: EventTarget | null;
-            },
-          ): Event & { command: string; source: EventTarget | null };
-        };
-
-        const event = new CommandEventClass("command", {
+        const event = new polyfillWindow.CommandEvent("command", {
           bubbles: true,
           cancelable: true,
           composed: true,
