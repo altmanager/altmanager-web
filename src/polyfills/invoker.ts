@@ -80,7 +80,10 @@ if (!("command" in document.createElement("button"))) {
 
     const btn = e.target.closest<HTMLButtonElement>("button");
 
-    if (btn === null || btn.disabled || btn.type === "submit" || btn.type === "reset") {
+    if (
+      btn === null || btn.disabled || btn.type === "submit" ||
+      btn.type === "reset"
+    ) {
       return;
     }
 
