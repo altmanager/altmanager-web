@@ -21,7 +21,8 @@ export class PlayerConsole extends Component {
   public disabled = false;
 
   public constructor(
-    inputConsumer: (input: string) => unknown = () => {},
+    inputConsumer: (input: string) => unknown = () => {
+    },
     history: string[] = [],
   ) {
     super();
@@ -84,7 +85,7 @@ export class PlayerConsole extends Component {
     );
   }
 
-  public write(message: unknown, channel?: string) {
+  public write(message: unknown, channel?: string, time = new Date()) {
     if (this.out.value === undefined) {
       return;
     }
@@ -92,6 +93,17 @@ export class PlayerConsole extends Component {
     const mcText = new McText();
     mcText.json = JSON.stringify(message);
     const line = document.createElement("p");
+
+    const timestamp = document.createElement("time");
+    timestamp.classList.add("text-xs", "text-zinc-500");
+    timestamp.dateTime = time.toISOString();
+    timestamp.textContent = time.toLocaleTimeString(void 0, {
+      hour: "numeric",
+      minute: "numeric",
+    });
+    line.append(timestamp);
+    line.append(new Text(" "));
+
     if (channel !== undefined) {
       const span = document.createElement("span");
       span.classList.add("text-zinc-400");
