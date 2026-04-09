@@ -109,7 +109,7 @@ export class AccountPage extends Page {
       const since = console.disconnectedTime?.getTime() ?? null;
       const messages = since === null ? h : h.filter((m) => m.time > since);
       for (const entry of messages) {
-        console.write(entry.message);
+        console.write(entry.message, void 0, new Date(entry.time));
       }
     });
     this.playerList = AccountPage.playerLists.get(this.uuid) ?? [];
