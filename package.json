@@ -24,7 +24,7 @@
     "@toolwind/anchors": "^1.0.10",
     "rollup-plugin-minify-template-literals": "^1.1.7",
     "typescript": "^6.0.3",
-    "vite": "^8.0.10"
+    "vite": "^8.1.4"
   },
   "dependencies": {
     "lit": "^3.3.2",
